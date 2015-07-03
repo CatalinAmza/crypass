@@ -5,3 +5,7 @@
 use with header like "service  ||  id_name  ||  password  ||  comments"
 
 key initialiazed during first use
+
+----------
+
+should implement a changeKey option
