@@ -1,17 +1,18 @@
 from random import randrange
-import subprocess
 from crypt import *
 import time
 import sys
 from Log import Log
 import os
 import shutil
+import win32clipboard
 
 FILE = 'temp' # password file name
 
 def copyToClipboard(text):
-    command = "echo " + text.strip() + "|clip"
-    return subprocess.check_call(command, shell=True)
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardData(win32clipboard.CF_UNICODETEXT, text)
 
 def generate(choice, infos, length, log):
     my_chars = []
@@ -108,6 +109,7 @@ else:
                         pos = i
                 index = search(data)
                 if choice == 2:
+                    copyToClipboard(str(data.log[index][pos]))
                     print("Here's your account: %s. Copied password to clipboard." % str(data.log[index]))
                 if choice == 3:
                     x = data.log.pop(index)
