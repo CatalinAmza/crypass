@@ -78,15 +78,21 @@ def search(data):
         time.sleep(1)
         return search(data)
 
-if len(sys.argv) != 3:  #provide two launch arguments - your key and your path
-    print("Use this with a key and a default folder.")
+def trim(text):
+    for i in range(len(text)):
+        if text[len(text) - 1 - i] == "/":
+            return text[:len(text) - 1 -i]
+    return text
+
+if len(sys.argv) != 2:  #provide your key as launch parameter
+    print("Use this with a key.")
 else:
     key = sys.argv[1].encode() # provide it as a parameter at launch
     if len(key) != 32:
         print("Wrong key.")
         time.sleep(3)
     else:
-        FILE = sys.argv[2] + "/" + FILE
+        FILE = trim(sys.argv[0]) + "/" + FILE
         now = time.time()
         shutil.copyfile(FILE, FILE + '.' + str(now).replace(".", ""))
         decrypt_file(FILE, key)
