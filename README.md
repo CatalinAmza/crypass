@@ -3,7 +3,6 @@
 256 bit encrypted password saver (32 character key)
 
 use with header like "service  ||  id_name  ||  password  ||  comments"
-
 example of decrypted file: http://i.imgur.com/7eZ0ZbF.png
 
 key initialiazed during first use (comment out line 91 - decrypt(FILE, key) - for the first usage)
