@@ -5,14 +5,7 @@ import sys
 from Log import Log
 import os
 import shutil
-import win32clipboard
-
-FILE = 'temp' # password file name
-
-def copyToClipboard(text):
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardData(win32clipboard.CF_UNICODETEXT, text)
+import pyperclip
 
 def generate(choice, infos, length, log):
     my_chars = []
@@ -33,17 +26,19 @@ def generate(choice, infos, length, log):
     i = 0
     j = 0
     while i < len(log.header):
-        if "password" in log.header[i].lower():  # should've probably made a super-item header
+        if "password" in log.header[i].lower():
             new_data.append(password)
             j = 1
             i += 1
         else:
-            new_data.append(infos[i-j])
+            if len(infos[i-j].replace(" ", "")) == 0:
+                new_data.append("N/A")
+            else:
+                new_data.append(infos[i-j])
             i += 1
     log.add(new_data)
     log.save()
-    copyToClipboard(password)
-
+    pyperclip.copy(password)
 
 def contains(l1, l2):
     g_res = True
@@ -59,7 +54,6 @@ def getType():
     print("1. Letters + Numbers")
     print("2. ASCII")
     return int(input("Your choice: "))
-
 
 def search(data):
     scoop = input("What are you looking for?\n").split()
@@ -78,26 +72,34 @@ def search(data):
         time.sleep(1)
         return search(data)
 
-def trim(text):
+def get_file_name(text):
     for i in range(len(text)):
         if text[len(text) - 1 - i] == "/":
-            return text[:len(text) - 1 -i]
+            return text[len(text) - i:]
     return text
 
-if len(sys.argv) != 2:  #provide your key as launch parameter
-    print("Use this with a key.")
+def get_folder(text):
+    for i in range(len(text)):
+        if text[len(text) - 1 - i] == "/":
+            return text[:len(text) - i]
+    return ""
+
+if len(sys.argv) != 3:
+    print("Use it with the full path of the file you stored your passwords in and your key.")
+    time.sleep(3)
 else:
-    key = sys.argv[1].encode() # provide it as a parameter at launch
+    key = sys.argv[2].encode()
     if len(key) != 32:
         print("Wrong key.")
         time.sleep(3)
     else:
-        FILE = trim(sys.argv[0]) + "/" + FILE
+        file = sys.argv[1]
         now = time.time()
-        shutil.copyfile(FILE, FILE + '.' + str(now).replace(".", ""))
-        decrypt_file(FILE, key)
+        working_file = get_folder(sys.argv[0]) + get_file_name(file) + '.' + str(now).replace(".", "")
+        shutil.copyfile(file, working_file)
+        decrypt_file(working_file, key)
         try:
-            data = Log(file_name=FILE, separator="  ||  ")
+            data = Log(file_name=working_file, separator="  ||  ")
         except Exception:
             print("Wrong key.")
             time.sleep(3)
@@ -116,9 +118,10 @@ else:
                         pos = i
                 index = search(data)
                 if choice == 2:
-                    copyToClipboard(str(data.log[index][pos]))
-                    print("Here's your account: %s. Copied password to clipboard." % str(data.log[index]))
-                if choice == 3:
+                    pyperclip.copy(str(data.log[index][pos]))
+                    data.log[index].remove(data.log[index][pos])
+                    print("Here's your account: %s. \nCopied password to clipboard." % str(data.log[index]))
+                if choice == 3: 
                     x = data.log.pop(index)
                     data.save()
                     print("Removed the following account: %s. Enjoy." % str(x))
@@ -128,8 +131,6 @@ else:
                 print("Invalid choice.")
             print("Program terminated. Waiting 3 seconds before deleting the decrypted file.")
             time.sleep(3)
-            encrypt_file(FILE, key)
-            try:
-                os.remove(FILE + '.' + str(now).replace(".", ""))
-            except:
-                ()
+            shutil.copyfile(working_file, file)
+            os.remove(working_file)
+            encrypt_file(file, key)
