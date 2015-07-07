@@ -8,13 +8,7 @@ launch it with full_file_path and key as parameters. example: "python3 crypass.p
 
 example of decrypted file: http://i.imgur.com/7eZ0ZbF.png
 
-key initialiazed during first use (comment out line 91 - decrypt(FILE, key) - for the first usage)
-
-----------
-
-TO DO:
-* should implement a changeKey option
-* should implement a changeKey option
+key initialiazed during first use (comment out line 113: "#decrypt(FILE, key)" for the first usage)
 
 USE WITH:
 * python 3.4
