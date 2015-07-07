@@ -84,8 +84,21 @@ def get_folder(text):
             return text[:len(text) - i]
     return ""
 
+def check_choice(text):
+    try:
+        x = int(text)
+    except:
+        print("Invalid choice, try again")
+        return check_choice(input("1. Add new account\n2. Get an account\n3. Change a password\n4. Remove an account\n5. Change the master key\n6. Print a decrypted temp\nYour choice: "))
+    else:
+        if x in range(7):
+            return x
+        else:
+            print("Invalid choice, try again")
+            return check_choice(input("1. Add new account\n2. Get an account\n3. Change a password\n4. Remove an account\n5. Change the master key\n6. Print a decrypted temp\nYour choice: "))
+
 if len(sys.argv) != 3:
-    print("Use it with the full path of the file you stored your passwords in and your key.")
+    print("Use this with the full path of your password file and your key.")
     time.sleep(3)
 else:
     key = sys.argv[2].encode()
@@ -100,11 +113,13 @@ else:
         decrypt_file(working_file, key)
         try:
             data = Log(file_name=working_file, separator="  ||  ")
+            if len(data.log[0]) == 1:
+                raise Exception
         except Exception:
             print("Wrong key.")
             time.sleep(3)
         else:
-            choice = int(input("1. Add new account\n2. Get an account\n3. Remove an account\n4. Print a decrypted temp\nYour choice: "))
+            choice = check_choice(input("1. Add new account\n2. Get an account\n3. Change a password\n4. Remove an account\n5. Change the master key\n6. Print a decrypted temp\nYour choice: "))
             if choice == 1:
                 infos = []
                 for head in data.header:
@@ -112,7 +127,7 @@ else:
                         infos.append(input(head + ": "))
                 length = int(input("Password length: "))
                 generate(getType(), infos, length, data)
-            elif choice in [2,3]:
+            elif choice in [2,3,4]:
                 for i in range(len(data.header)):
                     if "password" in data.header[i].lower():
                         pos = i
@@ -121,14 +136,25 @@ else:
                     pyperclip.copy(str(data.log[index][pos]))
                     data.log[index].remove(data.log[index][pos])
                     print("Here's your account: %s. \nCopied password to clipboard." % str(data.log[index]))
-                if choice == 3: 
+                elif choice == 3:
+                    length = int(input("Password length: "))
+                    x = data.log[index]
+                    x.remove(x[pos])
+                    data.log.remove(data.log[index])
+                    generate(getType(), x, length, data)
+                    print("Password successfully changed. Copied new password to clipboard.")
+                else:
                     x = data.log.pop(index)
                     data.save()
                     print("Removed the following account: %s. Enjoy." % str(x))
-            elif choice == 4:
-                open(os.path.expanduser("~/Desktop/" + 'temp'), 'w').write(data.__str__())
+            elif choice == 5:
+                key = ""
+                while len(key) != 32:
+                    key = input("Insert your new key (32 characters long): ")
+                key = key.encode()
+                print("Successfully changed your key.")
             else:
-                print("Invalid choice.")
+                open(os.path.expanduser("~/Desktop/" + 'temp'), 'w').write(data.__str__())
             print("Program terminated. Waiting 3 seconds before deleting the decrypted file.")
             time.sleep(3)
             shutil.copyfile(working_file, file)
