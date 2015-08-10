@@ -1,14 +1,14 @@
 # crypass
 
-256 bit encrypted password saver (32 character key)
+256 bit encrypted password saver
 
 use with header like "service  ||  id_name  ||  password  ||  comments"
 
-launch it with full_file_path and key as parameters. example: "python3 crypass.py C:/mypasses.txt thisismykey"
+launch it with full_file_path as parameter. example: "python3 crypass.py C:/mypasses.txt"
 
 example of decrypted file: http://i.imgur.com/7eZ0ZbF.png
 
-key initialiazed during first use (comment out line 113: "#decrypt(FILE, key)" for the first usage)
+key initialiazed during first use (comment out line: "#decrypt(FILE, key)" for the first usage)
 
 USE WITH:
 * python 3.4
