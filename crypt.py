@@ -26,6 +26,3 @@ def encrypt_file(file_name, key):
 def decrypt_file(file_name, key):
     decrypted = decrypt(open(file_name, 'rb').read(), key)
     open(file_name, 'wb').write(decrypted)
-
-
-
