@@ -4,7 +4,7 @@
 
 use with header like "service  ||  id_name  ||  password  ||  comments"
 
-launch it with full_file_path as parameter. example: "python3 crypass.py C:/mypasses.txt"
+launch it with full_file_path as parameter. example: "python3 crypass.py --path C:/mypasses.txt"
 
 example of decrypted file: http://i.imgur.com/7eZ0ZbF.png
 
