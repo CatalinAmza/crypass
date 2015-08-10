@@ -8,7 +8,7 @@ launch it with full_file_path as parameter. example: "python3 crypass.py C:/mypa
 
 example of decrypted file: http://i.imgur.com/7eZ0ZbF.png
 
-key initialiazed during first use (comment out line: "#decrypt(FILE, key)" for the first usage)
+key initialiazed during first use (comment out line 123 for the first usage)
 
 USE WITH:
 * python 3.4
