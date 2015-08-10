@@ -13,5 +13,6 @@ key initialiazed during first use (comment out line 113: "#decrypt(FILE, key)" f
 USE WITH:
 * python 3.4
 * pyperclip from here: https://pypi.python.org/pypi/pyperclip
-* pycrypto from here:h ttps://github.com/axper/python3-pycrypto-windows-installer
+* pycrypto from here: https://github.com/axper/python3-pycrypto-windows-installer
+* pysha from here: https://pypi.python.org/pypi/pysha3/
 * (on Linux) eventually do a sudo apt-get install python3-setuptools
