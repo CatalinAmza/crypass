@@ -1,5 +1,5 @@
 class Log(): # no error detection, use carefully
-    def __init__(self, file_name='temp', separator=-1): # separator = -1 for one item lines
+    def __init__(self, file_name='temp', separator=-1): # separator = -1 for one-item lines
         self.file_name = file_name
         self.separator = separator
         self.header = []
