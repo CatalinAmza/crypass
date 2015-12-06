@@ -106,10 +106,13 @@ def get_path():
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', nargs=1)
     args = parser.parse_args()
-    if args is None or not os.path.isfile(args.path[0]):
-            print("Path wrong or not provided.")
-            time.sleep(3)
-            sys.exit(0)
+    if args.path is None or not os.path.isfile(args.path[0]):
+            if os.path.isfile('E:/[docs]/rolear'):
+                return 'E:/[docs]/rolear'
+            else:
+                print("WTF R U DOING, GTFO :O")
+                time.sleep(3)
+                sys.exit(0)
     else:
         return args.path[0]
 
@@ -126,7 +129,7 @@ def run(file):
         if len(data.log[0]) == 1:
             raise Exception
     except Exception:
-        print("Try again.")
+        print("WRONG KEY, BITCH :O")
         time.sleep(3)
         return False
     else:
